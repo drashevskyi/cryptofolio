@@ -4,12 +4,27 @@ CryptoFolio is a backend API for a mobile app that tracks users' cryptocurrency 
 
 ---
 
+## ⚡ Quickstart
+
+```bash
+git clone https://github.com/drashevskyi/cryptofolio.git
+cd cryptofolio
+export POSTGRES_DSN="postgres://postgres:postgres@localhost:5432/cryptofolio?sslmode=disable"
+export JWT_SECRET="your-secret"
+createdb cryptofolio
+go mod tidy
+go build ./cmd/server
+./server
+```
+
+---
+
 ## 🚀 Features
 
 - Full CRUD for crypto assets
 - JWT-based stateless authentication
 - Live USD value via CoinGecko API
-- PostgreSQL backend (production-ready)
+- PostgreSQL backend
 - Validates supported currencies and amount
 - Includes test coverage for key endpoints
 
@@ -91,21 +106,23 @@ Returns:
 }
 ```
 
-Use this token in all subsequent requests:
+Use the returned token in the `Authorization` header like this:
 
-```
-Authorization: Bearer <your_token_here>
+```bash
+Authorization: Bearer eyJhbGciOi...
 ```
 
 ---
 
 ## 📡 API Endpoints
 
-All endpoints require a valid JWT.
+All endpoints require a valid JWT unless otherwise noted.
 
-### 🔐 POST /login
+---
 
-Authenticate a static user and receive a JWT.
+### 🔑 POST /login
+
+Authenticate using static credentials and receive a JWT.
 
 ---
 
@@ -113,7 +130,7 @@ Authenticate a static user and receive a JWT.
 
 Create a new crypto asset.
 
-**Body:**
+**Request Body:**
 
 ```json
 {
@@ -122,7 +139,6 @@ Create a new crypto asset.
   "amount": 1.25
 }
 ```
-i.e.
 
 ```bash
 curl -X POST http://localhost:8080/assets \
@@ -134,6 +150,8 @@ curl -X POST http://localhost:8080/assets \
     "amount": 1.75
 }'
 ```
+
+---
 
 ### 📄 GET /assets
 
@@ -151,11 +169,11 @@ curl http://localhost:8080/assets \
 Retrieve one asset by ID.
 
 ```bash
-curl http://localhost:8080/assets/{id} \
+curl http://localhost:8080/assets/1 \
   -H "Authorization: Bearer YOUR_TOKEN_HERE"
 ```
 
-**Response:**
+**Example Response:**
 
 ```json
 {
@@ -173,7 +191,7 @@ curl http://localhost:8080/assets/{id} \
 
 Update an existing asset.
 
-**Body:**
+**Request Body:**
 
 ```json
 {
@@ -216,7 +234,7 @@ curl http://localhost:8080/assets/value/total \
   -H "Authorization: Bearer YOUR_TOKEN_HERE"
 ```
 
-**Response:**
+**Example Response:**
 
 ```json
 {
@@ -247,9 +265,9 @@ cryptofolio/
 ├── cmd/server/         # Entrypoint (main.go)
 ├── internal/
 │   ├── auth/           # JWT auth logic
-│   ├── config/         # Static users, Api client url
+│   ├── config/         # Static users, API client config
 │   ├── handler/        # API routes & handlers
-│   ├── model/          # Asset structure
+│   ├── model/          # Asset structure + validation
 │   ├── rate/           # CoinGecko rate fetcher
 │   └── store/          # DB setup and test helpers
 ├── go.mod
@@ -262,8 +280,9 @@ cryptofolio/
 ## 📝 Notes
 
 - JWTs expire in 24 hours
-- Only BTC, ETH, LTC are supported
+- Only BTC, ETH, LTC are supported (enforced in code and DB)
 - All inputs are validated at API level
-- PostgreSQL used for concurrency and precision
+- PostgreSQL is used for data integrity and concurrency
+- Exchange rates are fetched dynamically from CoinGecko (no API key needed)
 
 ---
