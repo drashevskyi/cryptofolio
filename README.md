@@ -72,15 +72,15 @@ All routes (except `/login`) require a **JWT token** in the `Authorization` head
 
 | Username | Password   |
 |----------|------------|
-| alice    | password1  |
-| bob      | password2  |
+| user1    | password1  |
+| user2    | password2  |
 
 ### 🔁 Login Example
 
 ```bash
 curl -X POST http://localhost:8080/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"alice", "password":"password1"}'
+  -d '{"username":"user1", "password":"password1"}'
 ```
 
 Returns:
@@ -204,9 +204,9 @@ cryptofolio/
 ├── cmd/server/         # Entrypoint (main.go)
 ├── internal/
 │   ├── auth/           # JWT auth logic
-│   ├── config/         # Static users, env
+│   ├── config/         # Static users, Valid Currencies, Api client url
 │   ├── handler/        # API routes & handlers
-│   ├── model/          # Asset struct
+│   ├── model/          # Asset structure
 │   ├── rate/           # CoinGecko rate fetcher
 │   └── store/          # DB setup and test helpers
 ├── go.mod
@@ -224,7 +224,3 @@ cryptofolio/
 - PostgreSQL used for concurrency and precision
 
 ---
-
-## 📜 License
-
-MIT — use freely for learning, testing, and interviews.
