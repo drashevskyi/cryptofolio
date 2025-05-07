@@ -40,7 +40,7 @@ export JWT_SECRET="your-secure-jwt-secret"
 ### 1. Clone and install dependencies
 
 ```bash
-git clone https://github.com/youruser/cryptofolio.git
+git clone https://github.com/drashevskyi/cryptofolio.git
 cd cryptofolio
 go mod tidy
 ```
@@ -122,16 +122,38 @@ Create a new crypto asset.
   "amount": 1.25
 }
 ```
+i.e.
+
+```bash
+curl -X POST http://localhost:8080/assets \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "label": "My ETH Wallet",
+    "currency": "ETH",
+    "amount": 1.75
+}'
+```
 
 ### 📄 GET /assets
 
 List all assets for the authenticated user.
+
+```bash
+curl http://localhost:8080/assets \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
 
 ---
 
 ### 🔍 GET /assets/{id}
 
 Retrieve one asset by ID.
+
+```bash
+curl http://localhost:8080/assets/{id} \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
 
 **Response:**
 
@@ -161,17 +183,38 @@ Update an existing asset.
 }
 ```
 
+```bash
+curl -X PUT http://localhost:8080/assets/1 \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "label": "Updated Wallet Name",
+    "currency": "BTC",
+    "amount": 0.9
+}'
+```
+
 ---
 
 ### ❌ DELETE /assets/{id}
 
 Delete an asset.
 
+```bash
+curl -X DELETE http://localhost:8080/assets/1 \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
 ---
 
 ### 💰 GET /assets/value/total
 
 Returns the sum of all assets converted to USD using live exchange rates.
+
+```bash
+curl http://localhost:8080/assets/value/total \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
 
 **Response:**
 
@@ -204,7 +247,7 @@ cryptofolio/
 ├── cmd/server/         # Entrypoint (main.go)
 ├── internal/
 │   ├── auth/           # JWT auth logic
-│   ├── config/         # Static users, Valid Currencies, Api client url
+│   ├── config/         # Static users, Api client url
 │   ├── handler/        # API routes & handlers
 │   ├── model/          # Asset structure
 │   ├── rate/           # CoinGecko rate fetcher

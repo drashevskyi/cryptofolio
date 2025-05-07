@@ -1,11 +1,5 @@
 package config
 
-var ValidCurrencies = map[string]bool{
-	"BTC": true,
-	"ETH": true,
-	"LTC": true,
-}
-
 var StaticUsers = map[string]string{
 	"user1": "password1",
 	"user2": "password2",

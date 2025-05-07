@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"cryptofolio/internal/auth"
-	"cryptofolio/internal/config"
 	"cryptofolio/internal/model"
 	"cryptofolio/internal/rate"
 
@@ -25,8 +24,8 @@ func CreateAsset(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		if !config.ValidCurrencies[asset.Currency] {
-			http.Error(w, "Invalid currency. Only BTC, ETH, LTC are supported.", http.StatusBadRequest)
+		if !model.IsCurrencyAllowed(asset.Currency) {
+			http.Error(w, "Invalid currency. Only "+model.AllowedCurrencyList()+" are supported.", http.StatusBadRequest)
 			return
 		}
 
@@ -132,8 +131,8 @@ func UpdateAsset(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		if !config.ValidCurrencies[asset.Currency] {
-			http.Error(w, "Invalid currency. Only BTC, ETH, LTC are supported.", http.StatusBadRequest)
+		if !model.IsCurrencyAllowed(asset.Currency) {
+			http.Error(w, "Invalid currency. Only "+model.AllowedCurrencyList()+" are supported.", http.StatusBadRequest)
 			return
 		}
 

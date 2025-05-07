@@ -18,7 +18,6 @@ func NewTestDB(t *testing.T) *TestableDB {
 		t.Fatal(err)
 	}
 
-	// Clean + migrate
 	db.Exec("DROP TABLE IF EXISTS assets")
 	Migrate(db)
 
